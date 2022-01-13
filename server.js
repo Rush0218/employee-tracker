@@ -2,6 +2,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const consoleTable = require('console.table');
+const e = require("express");
 
 require('dotenv').config();
 
@@ -109,9 +110,127 @@ function viewAllDepts() {
     })
 };
 
+function selectRole() {
+  connection.query('SELECT * FROM role', function (err, res) {
+    if (err) {
+      throw err;
+    } else {
+      for (var i = 0; i < res.length; i++) {
+        roleArr.push(res[i].title);
+      }
+    }
+  })
+  return roleArr;
+};
+
+function selectManager() {
+  connection.query('SELECT first_name, last_name FROM employee WHERE manager_id IS NULL', function (err, res) {
+    if (err) {
+      throw err;
+    } else {
+      for (var i = 0; i < res.length; i++) {
+        managerArr.push(res[i].title);
+      }
+    }
+  })
+  return managerArr;
+};
 
 
+//create function to add new employees 
+function addEmployee() {
+  inquirer.prompt([
+    {
+      name: "firstname",
+      type: "input",
+      message: "Please enter employee's first name."
+    },
+    {
+      name: "firstname",
+      type: "input",
+      message: "Please enter employee's last name."
+    },
+    {
+      name: "role",
+      type: "list",
+      message: "Please select the employee's role.",
+      choices: selectRole()
+    },
+    {
+      name: "choice",
+      type: "rawlist",
+      message: "Please select the employee's manager.",
+      choices: selectManager()
+    }
+  ]).then(function (input) {
+    var roleId = selectRole().indexOf(input.role) + 1;
+    var managerId = selectManager().indexOf(input.choice) + 1;
+    connection.query("INSERT INTO employee SET ?",
+      {
+        first_name: input.firstName,
+        last_name: input.lastName,
+        role_id: roleId,
+        manager_id: managerId
+      },
+      function (err) {
+        if (err) {
+          throw err;
+        } else {
+          console.log(input);
+          initiatePrompt();
+        }
+      })
+  })
+};
 
+//create a function that allows users to update employee information
+function updateEmployee() {
+  connection.query("SELECT employee.last_name, role.title FROM employee JOIN role ON employee.role_id = role.id;",
+    function (err, res) {
+      if (err) {
+        throw err;
+      } else {
+        console.log(res)
+        inquirer.prompt([
+          {
+            name: 'lastName',
+            type: 'rawlist',
+            choices: function () {
+              var lastName = [];
+              for (var i = 0; i < res.length; i++) {
+                lastName.push(res[i].last_name);
+              }
+              return lastName;
+            },
+            message: "Please provide the employee's last name."
+          },
+          {
+            name: 'role',
+            type: 'rawlist',
+            message: 'Please select their new title.',
+            selectRole();
+          }
+        ]).then(function (input) {
+          var roleId = selectRole().indexOf(input.role) + 1;
+          connection.query("UPDATE employee SET WHERE ?",
+            {
+              last_name: input.lastName
+            },
+            {
+              role_id: roleId
+            },
+            function (err) {
+              if (err) {
+                throw err;
+              } else {
+                console.log(input);
+                initiatePrompt();
+              }
+            })
+        })
+      }
+    })
+};
 
 
 
