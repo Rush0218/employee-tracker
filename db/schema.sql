@@ -1,10 +1,8 @@
---Create Database--
 DROP DATABASE IF EXISTS company; 
 CREATE DATABASE company; 
 USE company; 
  
 
---Create Tables--
 
 CREATE TABLE department (
   id INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -30,13 +28,13 @@ CREATE TABLE employee (
 );
 
 
---Department Seeds--
+
 INSERT INTO department (name) VALUE ("Sales");
 INSERT INTO department (name) VALUE ("Tech");
 INSERT INTO department (name) VALUE ("Finance");
 INSERT INTO department (name) VALUE ("Legal");
 
---Role Seeds--
+
 INSERT INTO role (title, salary, department_id) VALUE ("Senior Software Engineer", 175000, 2);
 INSERT INTO role (title, salary, department_id) VALUE ("Legal Team Lead", 200000, 4);
 INSERT INTO role (title, salary, department_id) VALUE ("Accountant", 95000, 3);
@@ -45,7 +43,7 @@ INSERT INTO role (title, salary, department_id) VALUE ("Sales Rep", 80000, 1);
 INSERT INTO role (title, salary, department_id) VALUE ("Software Engineer", 125000, 2);
 INSERT INTO role (title, salary, department_id) VALUE ("Lawyer", 190000, 4);
 
---Employee Seeds--
+
 INSERT INTO employee (first_name, last_name, manager_id, role_id) VALUE ("Tre", "Rush", null, 1);
 INSERT INTO employee (first_name, last_name, manager_id, role_id) VALUE ("Natasha", "Romanoff", null, 2);
 INSERT INTO employee (first_name, last_name, manager_id, role_id) VALUE ("Stephen","Strange",null ,3);
