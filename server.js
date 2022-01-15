@@ -39,9 +39,9 @@ function initiatePrompt() {
         "View All Departments",
         "View All Employees By Role",
         "View All Employees By Deparment",
-        "Add Employee",
-        "Add Role",
         "Add Department",
+        "Add Role",
+        "Add Employee",
         "Update Employee"
       ]
     }
@@ -67,16 +67,16 @@ function initiatePrompt() {
         viewAllDepts();
         break;
 
-      case "Add Employee":
-        addEmployee();
+      case "Add Department":
+        addDept();
         break;
 
       case "Add Role":
         addRole();
         break;
 
-      case "Add Department":
-        addDept();
+      case "Add Employee":
+        addEmployee();
         break;
 
       case "Update Employee":
@@ -87,7 +87,7 @@ function initiatePrompt() {
 };
 
 
-
+//created a function to view all employees
 function viewAllEmployees() {
   connection.query("SELECT employee.first_name, employee.last_name, role.title, role.salary, department.name, CONCAT(e.first_name, ' ' ,e.last_name) AS Manager FROM employee INNER JOIN role on role.id = employee.role_id INNER JOIN department on department.id = role.department_id left join employee e on employee.manager_id = e.id;",
     function (err, res) {
@@ -99,6 +99,7 @@ function viewAllEmployees() {
     })
 };
 
+//create a function to view all roles
 function viewAllRoles() {
   connection.query('SELECT * FROM role;',
     function (err, res) {
@@ -110,7 +111,7 @@ function viewAllRoles() {
     })
 };
 
-
+//create a function to view all departments 
 function viewDepts() {
   connection.query('SELECT * FROM department;',
     function (err, res) {
@@ -122,6 +123,7 @@ function viewDepts() {
     })
 };
 
+//create function to view all employees by department
 function viewAllDepts() {
   connection.query('SELECT employee.first_name, employee.last_name, department.name AS Department FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employee.id;',
     function (err, res) {
@@ -134,7 +136,7 @@ function viewAllDepts() {
 };
 
 
-
+// create function to get all data within the role table
 function selectRole() {
   console.log(roleArr)
   connection.query('SELECT * FROM role', function (err, res) {
@@ -151,6 +153,7 @@ function selectRole() {
 
 };
 
+// create function to grab all employee's that have the title of manager
 function selectManager() {
   connection.query('SELECT first_name, last_name FROM employee WHERE manager_id IS NULL', function (err, res) {
     if (err) {
@@ -165,7 +168,7 @@ function selectManager() {
   return managerArr;
 };
 
-
+// create function to get all data from department table
 function selectDept() {
   connection.query('SELECT * FROM department', function (err, res) {
     if (err) {
