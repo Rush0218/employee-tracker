@@ -24,6 +24,8 @@ A employee tracking application utilizing MySQL and Node.js
 - `git clone` this repository locally. 
 - Run `npm init` to install necessary node packages. 
 - Run `npm i mysql2` to install MySQL2 to connect to database. 
+- Run `npm i inquirer` 
+- Run `npm i console.table` 
 
 ## Usage 
 
